@@ -10,6 +10,11 @@ export default function Calculator() {
   const [storedValue, setStoredValue] = useState<string>("");
   const [operator, setOperator] = useState<string>("");
 
+  // const [memory, setMemory] = useState<number>(0);
+  // const [result, setResult] = useState<number>(0);
+  // const [waitingForOperand, setWaitingForOperand] = useState<boolean>(true);
+  // const [pendingOperator, setPendingOperator] = useState<Operator>();
+
   const spacingForButtons = 2;
 
   const handleButtonClick = (value: string) => {
@@ -70,7 +75,10 @@ export default function Calculator() {
         rounded="md"
       >
         <TitleBar titleName={"Calculator"} />
-        <CalculatorDisplay value={displayValue} />
+        <CalculatorDisplay
+          value={displayValue}
+          expression={storedValue + operator + storedValue}
+        />
         <VStack spacing={spacingForButtons}>
           <Flex width={48}>
             <CalculatorButton value="C" onClick={handleClearClick} />

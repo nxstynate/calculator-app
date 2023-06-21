@@ -4,14 +4,15 @@
 // }
 
 export function calculateResult(expression: string): number | null {
+  const sanitizedExpression = expression.replace(/[^-()\d/*+.]/g, ""); // Remove any invalid characters
+
+  // Check if the sanitized expression contains only valid characters
+  if (sanitizedExpression !== expression) {
+    return null; // Indicate invalid expression error
+  }
+
   try {
-    const sanitizedExpression = expression.replace(/[^-()\d/*+.]/g, ""); // Remove any invalid characters
-
-    // Use the Function constructor to create a function with the expression as its body
-    const fn = new Function(`return ${sanitizedExpression};`);
-
-    // Invoke the function to evaluate the expression and get the result
-    const result = fn();
+    const result = eval(sanitizedExpression); // Use eval() to directly evaluate the expression
 
     // Check if the result is a valid number
     if (Number.isNaN(result) || !Number.isFinite(result)) {
