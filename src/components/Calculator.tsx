@@ -6,64 +6,40 @@ import TitleBar from "./TitleBar";
 import { calculateResult } from "./calculatorUtils";
 
 export default function Calculator() {
-  const [displayValue, setDisplayValue] = useState<string>("");
-  const [storedValue, setStoredValue] = useState<string>("");
+  const [display, setDisplay] = useState<string>("0");
   const [operator, setOperator] = useState<string>("");
+  const [prevValue, setPrevValue] = useState<string>("");
 
-  // const [memory, setMemory] = useState<number>(0);
-  // const [result, setResult] = useState<number>(0);
-  // const [waitingForOperand, setWaitingForOperand] = useState<boolean>(true);
-  // const [pendingOperator, setPendingOperator] = useState<Operator>();
-
-  const spacingForButtons = 2;
-
-  const handleButtonClick = (value: string) => {
-    if (value === "=") {
-      handleCalculateClick();
-    } else if (
-      value === "+" ||
-      value === "-" ||
-      value === "*" ||
-      value === "/"
-    ) {
-      handleOperatorClick(value);
+  const handleNumberClick = (num: string) => {
+    if (display === "0") {
+      setDisplay(num);
     } else {
-      setDisplayValue(prevValue => {
-        if (prevValue === "=" || prevValue === "Error") {
-          return value;
-        } else {
-          return prevValue + value;
-        }
-      });
+      setDisplay(prevDisplay => prevDisplay + num);
     }
   };
 
-  const handleOperatorClick = (value: string) => {
-    if (displayValue !== "") {
-      setStoredValue(displayValue);
-      setOperator(value);
-      setDisplayValue("");
-    }
+  const handleOperatorClick = (op: string) => {
+    setOperator(op);
+    setPrevValue(display);
+    setDisplay("");
   };
 
   const handleClearClick = () => {
-    setDisplayValue("");
-    setStoredValue("");
+    setDisplay("0");
     setOperator("");
+    setPrevValue("");
   };
 
-  const handleCalculateClick = () => {
-    try {
-      const result = calculateResult(storedValue + operator + displayValue);
-      setDisplayValue(result.toString());
-      setStoredValue(storedValue);
-      setOperator("");
-    } catch (error) {
-      setDisplayValue("Error");
-      setStoredValue("");
-      setOperator("");
+  const handleEqualsClick = () => {
+    const result = calculateResult(prevValue + operator + display);
+    if (result !== null) {
+      setDisplay(result.toString());
+    } else {
+      null;
     }
   };
+
+  const spacingForButtons = 2;
 
   return (
     <Container maxW="xs" mt={10} p={4} boxShadow="lg" rounded="md">
@@ -76,8 +52,8 @@ export default function Calculator() {
       >
         <TitleBar titleName={"Calculator"} />
         <CalculatorDisplay
-          value={displayValue}
-          expression={storedValue + operator + storedValue}
+          value={display}
+          expression={prevValue + operator + display}
         />
         <VStack spacing={spacingForButtons}>
           <Flex width={48}>
@@ -85,34 +61,34 @@ export default function Calculator() {
           </Flex>
           <Flex>
             <HStack spacing={spacingForButtons}>
-              <CalculatorButton value="7" onClick={handleButtonClick} />
-              <CalculatorButton value="8" onClick={handleButtonClick} />
-              <CalculatorButton value="9" onClick={handleButtonClick} />
-              <CalculatorButton value="*" onClick={handleButtonClick} />
+              <CalculatorButton value="7" onClick={handleNumberClick} />
+              <CalculatorButton value="8" onClick={handleNumberClick} />
+              <CalculatorButton value="9" onClick={handleNumberClick} />
+              <CalculatorButton value="*" onClick={handleOperatorClick} />
             </HStack>
           </Flex>
           <Flex>
             <HStack spacing={spacingForButtons}>
-              <CalculatorButton value="4" onClick={handleButtonClick} />
-              <CalculatorButton value="5" onClick={handleButtonClick} />
-              <CalculatorButton value="6" onClick={handleButtonClick} />
-              <CalculatorButton value="-" onClick={handleButtonClick} />
+              <CalculatorButton value="4" onClick={handleNumberClick} />
+              <CalculatorButton value="5" onClick={handleNumberClick} />
+              <CalculatorButton value="6" onClick={handleNumberClick} />
+              <CalculatorButton value="-" onClick={handleOperatorClick} />
             </HStack>
           </Flex>
           <Flex>
             <HStack spacing={spacingForButtons}>
-              <CalculatorButton value="1" onClick={handleButtonClick} />
-              <CalculatorButton value="2" onClick={handleButtonClick} />
-              <CalculatorButton value="3" onClick={handleButtonClick} />
-              <CalculatorButton value="+" onClick={handleButtonClick} />
+              <CalculatorButton value="1" onClick={handleNumberClick} />
+              <CalculatorButton value="2" onClick={handleNumberClick} />
+              <CalculatorButton value="3" onClick={handleNumberClick} />
+              <CalculatorButton value="+" onClick={handleOperatorClick} />
             </HStack>
           </Flex>
           <Flex>
             <HStack spacing={spacingForButtons}>
-              <CalculatorButton value="0" onClick={handleButtonClick} />
-              <CalculatorButton value="." onClick={handleButtonClick} />
-              <CalculatorButton value="=" onClick={handleButtonClick} />
-              <CalculatorButton value="/" onClick={handleButtonClick} />
+              <CalculatorButton value="0" onClick={handleNumberClick} />
+              <CalculatorButton value="." onClick={handleNumberClick} />
+              <CalculatorButton value="=" onClick={handleEqualsClick} />
+              <CalculatorButton value="/" onClick={handleOperatorClick} />
             </HStack>
           </Flex>
         </VStack>

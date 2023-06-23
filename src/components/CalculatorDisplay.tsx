@@ -15,7 +15,7 @@ export default function CalculatorDisplay({
       bg="gray.600"
       fontSize="2xl"
       p={4}
-      mb={8}
+      mb={6}
       textAlign="right"
       rounded="md"
     >

@@ -46,7 +46,7 @@ export const App: FunctionComponent = () => {
     }
 
     setResult(newResult);
-    setDisplay(newResult.toString().toString().slice(0, 12));
+    setDisplay(newResult.toString().slice(0, 12));
 
     return true;
   };
